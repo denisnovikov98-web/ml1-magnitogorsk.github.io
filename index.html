@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#323c8d">
+<title>Расписание уроков — Филология</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#323c8d; --brand-2:#4a55b0; --bg:#eef0f7; --surface:#ffffff; --ink:#1c2140; --muted:#666c8c;
+  --line:#dfe2ee; --now:#ffb84d; --now-bg:#fff6e6; --chip:#e4e7f4; --on-brand:#ffffff;
+  --a:#323c8d; --b:#1f8a70;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --brand:#8f98e8; --brand-2:#aab1f0; --bg:#12142a; --surface:#1c1f3a; --ink:#e8eaf6; --muted:#9ba0c2;
+  --line:#2c3052; --now:#ffb84d; --now-bg:#3a2f1c; --chip:#262a4c; --on-brand:#12142a; --a:#8f98e8; --b:#5fd0b0;
+}}
+:root[data-theme="dark"]{
+  --brand:#8f98e8; --brand-2:#aab1f0; --bg:#12142a; --surface:#1c1f3a; --ink:#e8eaf6; --muted:#9ba0c2;
+  --line:#2c3052; --now:#ffb84d; --now-bg:#3a2f1c; --chip:#262a4c; --on-brand:#12142a; --a:#8f98e8; --b:#5fd0b0;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.45}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--now);outline-offset:2px;border-radius:6px}
+
+header.top{background:#323c8d;color:#fff;padding:28px 0 64px}
+header.top .wrap{padding:0 16px}
+.wrap{max-width:980px;margin:0 auto}
+.brandrow{display:flex;align-items:center;gap:14px}
+.logo{width:52px;height:52px;border-radius:12px;background:#fff;color:#323c8d;display:grid;place-items:center;text-align:center;font-weight:700;font-size:14px;line-height:1.05;letter-spacing:-.02em;flex:none}
+header h1{margin:0;font-size:clamp(22px,4vw,30px);font-weight:700;letter-spacing:-.01em}
+header p{margin:2px 0 0;opacity:.8;font-size:15px}
+
+.searchbox{position:relative;margin:-36px auto 0;max-width:980px;padding:0 16px}
+.search{display:flex;align-items:center;background:var(--surface);border-radius:14px;box-shadow:0 10px 30px rgba(30,36,90,.18);padding:6px 6px 6px 18px}
+.search label{position:absolute;left:-9999px}
+.search input{flex:1;border:0;background:transparent;padding:14px 4px;font-size:18px;outline:none;min-width:0}
+.search button{border:0;background:var(--brand);color:var(--on-brand);border-radius:10px;padding:12px 18px;font-weight:600;cursor:pointer}
+.sugg{position:absolute;left:16px;right:16px;top:100%;margin-top:6px;background:var(--surface);border-radius:12px;box-shadow:0 14px 34px rgba(30,36,90,.2);list-style:none;padding:6px;z-index:20;max-height:320px;overflow:auto}
+.sugg[hidden]{display:none}
+.sugg li{padding:10px 12px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;gap:12px}
+.sugg li small{color:var(--muted)}
+.sugg li[aria-selected="true"],.sugg li:hover{background:var(--chip)}
+
+main{padding:24px 16px 48px}
+.pick h2{font-size:15px;font-weight:600;color:var(--muted);margin:26px 0 10px}
+.grades{display:grid;gap:8px}
+.grade{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.grade .num{width:34px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;cursor:pointer;font-weight:500}
+.chip:hover{border-color:var(--brand);color:var(--brand)}
+.chip.a::before,.chip.b::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.chip.b::before{background:var(--b)}
+.chip.a::before{background:var(--a)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin-top:10px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend .la::before{background:var(--a)} .legend .lb::before{background:var(--b)}
+.teachers{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.pick h2.tc{text-align:center}
+.gnums{display:flex;gap:8px;flex-wrap:wrap}
+.gnum{border:1px solid var(--line);background:var(--surface);border-radius:12px;min-width:64px;padding:12px 14px;font-size:20px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-variant-numeric:tabular-nums}
+.gnum:hover{border-color:var(--brand);color:var(--brand)}
+.gnum.b{border-bottom:3px solid var(--b)} .gnum.a{border-bottom:3px solid var(--a)}
+.gnum .car{width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);opacity:.55;transition:transform .15s}
+.gnum[aria-expanded="true"]{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.gnum[aria-expanded="true"] .car{transform:rotate(-135deg) translate(-2px,-1px);opacity:1}
+.glist{margin-top:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.glist[hidden]{display:none}
+.gtitle{font-size:14px;color:var(--muted);margin-bottom:10px}
+.gchips{display:flex;gap:8px;flex-wrap:wrap}
+.gchips .chip{font-size:17px;padding:8px 18px}
+@media (prefers-reduced-motion:no-preference){.glist{animation:in .18s ease both}}
+
+
+.view[hidden],.pick[hidden],.daytabs[hidden],.bells[hidden]{display:none}
+.vhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.back{border:0;background:none;color:var(--brand);cursor:pointer;padding:4px 0;font-weight:500}
+.vhead h2{margin:4px 0 0;font-size:clamp(26px,5vw,38px);letter-spacing:-.02em;line-height:1.1}
+.vhead .meta{color:var(--muted);margin-top:4px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tbtn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:14px}
+.tbtn[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+
+.daytabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px}
+.daytabs button{flex:none;border:0;background:var(--chip);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:500}
+.daytabs button[aria-selected="true"]{background:var(--brand);color:var(--on-brand)}
+.daytabs button.today:not([aria-selected="true"])::after{content:" •";color:var(--now)}
+
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.days.single{grid-template-columns:1fr}
+.day{background:var(--surface);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.day h3{margin:0;padding:12px 16px;font-size:16px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line)}
+.day h3 small{font-weight:500;color:var(--muted);font-size:13px}
+.day.today{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.day.today h3{background:var(--brand);color:var(--on-brand)} .day.today h3 small{color:inherit;opacity:.85}
+.les{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:11px 16px;border-top:1px solid var(--line)}
+.les:first-of-type{border-top:0}
+.les .n{font-weight:700;font-size:20px;color:var(--brand);line-height:1.1;font-variant-numeric:tabular-nums}
+.les .tm{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.les .s{font-weight:600}
+.les .x{font-size:14px;color:var(--muted)}
+.les .x a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;cursor:pointer}
+.les .x a:hover{color:var(--brand)}
+.les .room{display:inline-block;background:var(--chip);border-radius:6px;padding:0 7px;font-size:13px;font-weight:600;color:var(--ink);margin-left:4px}
+.les.now{background:var(--now-bg);box-shadow:inset 4px 0 0 var(--now)}
+.les .badge{font-size:12px;font-weight:600;color:#8a5a00;background:var(--now);border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:1px}
+.empty{padding:16px;color:var(--muted);font-size:15px}
+
+.bells{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:auto;margin-bottom:16px}
+.bells table{border-collapse:collapse;width:100%;min-width:320px;font-variant-numeric:tabular-nums}
+.bells th,.bells td{padding:8px 14px;text-align:left;border-top:1px solid var(--line)}
+.bells thead th{border-top:0;font-size:14px;color:var(--muted);font-weight:600}
+.bells td:first-child{font-weight:700;color:var(--brand);width:48px}
+.bells .hl{background:var(--now-bg)}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 32px}
+@media (max-width:560px){ .search input{font-size:16px} .search button{padding:12px 14px} }
+@media (prefers-reduced-motion:no-preference){ .day{animation:in .25s ease both} @keyframes in{from{opacity:0;transform:translateY(4px)}} }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap brandrow">
+  <div class="logo" aria-hidden="true">МЛ<br>№1</div>
+  <div><h1>Расписание уроков</h1><p>Многопрофильный лицей № 1 · кафедра филологии</p></div>
+</div></header>
+
+<div class="searchbox">
+  <form class="search" id="sform" role="search" autocomplete="off">
+    <label for="q">Класс или фамилия учителя</label>
+    <input id="q" type="search" placeholder="Класс или учитель" aria-autocomplete="list" aria-controls="sugg">
+    <button type="submit">Показать</button>
+  </form>
+  <ul class="sugg" id="sugg" role="listbox" hidden></ul>
+</div>
+
+<main class="wrap">
+  <section class="pick" id="pick">
+    <h2 class="tc">Учителя</h2>
+    <div class="teachers" id="teachers"></div>
+    <h2>Классы</h2>
+    <div id="grades"></div>
+    <div class="legend"><span class="lb">5–6 классы — корпус Б</span><span class="la">7–11 классы — корпус А</span></div>
+  </section>
+
+  <section class="view" id="view" hidden>
+    <div class="vhead">
+      <div>
+        <button class="back" id="back" type="button">← Все классы и учителя</button>
+        <h2 id="vtitle"></h2>
+        <div class="meta" id="vmeta"></div>
+      </div>
+      <div class="tools">
+        <button class="tbtn" id="bbtn" type="button" aria-pressed="false">Звонки</button>
+        <button class="tbtn" id="mode" type="button" aria-pressed="false">Только сегодня</button>
+      </div>
+    </div>
+    <div class="bells" id="bells" hidden></div>
+    <div class="daytabs" id="tabs" role="tablist" hidden></div>
+    <div class="days" id="days"></div>
+  </section>
+</main>
+<footer>Неделя одна, расписание повторяется каждую неделю.</footer>
+
+<script>
+const DATA = {"lessons": [{"t": "Гневэк Ольга Владимировна", "d": 4, "n": 1, "s": "русский язык", "c": ["8г"], "r": "305"}, {"t": "Гневэк Ольга Владимировна", "d": 0, "n": 2, "s": "русский язык", "c": ["5б"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 3, "n": 2, "s": "русский язык", "c": ["8г"], "r": "111"}, {"t": "Гневэк Ольга Владимировна", "d": 4, "n": 2, "s": "русский язык", "c": ["8г"], "r": "305"}, {"t": "Гневэк Ольга Владимировна", "d": 0, "n": 3, "s": "русский язык", "c": ["5а"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 2, "n": 3, "s": "русский язык", "c": ["5а"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 3, "n": 3, "s": "русский язык", "c": ["8д"], "r": "111"}, {"t": "Гневэк Ольга Владимировна", "d": 4, "n": 3, "s": "русский язык", "c": ["8б"], "r": "305"}, {"t": "Гневэк Ольга Владимировна", "d": 2, "n": 4, "s": "русский язык", "c": ["5б"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 4, "n": 4, "s": "русский язык", "c": ["8б"], "r": "305"}, {"t": "Гневэк Ольга Владимировна", "d": 0, "n": 5, "s": "русский язык", "c": ["8д"], "r": "305"}, {"t": "Гневэк Ольга Владимировна", "d": 2, "n": 5, "s": "русский язык", "c": ["5а"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 3, "n": 5, "s": "русский язык", "c": ["5б"], "r": "301"}, {"t": "Гневэк Ольга Владимировна", "d": 4, "n": 5, "s": "русский язык", "c": ["5а"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 0, "n": 6, "s": "русский язык", "c": ["8д"], "r": "305"}, {"t": "Гневэк Ольга Владимировна", "d": 2, "n": 6, "s": "русский язык", "c": ["5б"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 3, "n": 6, "s": "русский язык", "c": ["5а"], "r": "301"}, {"t": "Гневэк Ольга Владимировна", "d": 4, "n": 6, "s": "русский язык", "c": ["5б"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 0, "n": 7, "s": "русский язык", "c": ["8б"], "r": "305"}, {"t": "Гневэк Ольга Владимировна", "d": 3, "n": 7, "s": "д. ОТДиКР", "c": ["5б"], "r": "301"}, {"t": "Гневэк Ольга Владимировна", "d": 4, "n": 7, "s": "д. ОТДиКР", "c": ["5а"], "r": "303"}, {"t": "Гневэк Ольга Владимировна", "d": 0, "n": 8, "s": "д. УЗОЯ", "c": ["8г"], "r": "305"}, {"t": "Гневэк Ольга Владимировна", "d": 0, "n": 9, "s": "д. УЗОЯ", "c": ["8а", "8б"], "r": "109"}, {"t": "Кольба Владлена Вадимовна", "d": 0, "n": 1, "s": "вн. РОВ", "c": ["7д"], "r": "106"}, {"t": "Кольба Владлена Вадимовна", "d": 1, "n": 1, "s": "русский язык", "c": ["5в"], "r": "301"}, {"t": "Кольба Владлена Вадимовна", "d": 3, "n": 1, "s": "вн. РМГ", "c": ["7д"], "r": "106"}, {"t": "Кольба Владлена Вадимовна", "d": 4, "n": 1, "s": "русский язык", "c": ["5в"], "r": "304"}, {"t": "Кольба Владлена Вадимовна", "d": 2, "n": 2, "s": "русский язык", "c": ["5в"], "r": "211"}, {"t": "Кольба Владлена Вадимовна", "d": 3, "n": 2, "s": "литература", "c": ["7д"], "r": "104"}, {"t": "Кольба Владлена Вадимовна", "d": 0, "n": 3, "s": "русский язык", "c": ["5в"], "r": "304"}, {"t": "Кольба Владлена Вадимовна", "d": 1, "n": 3, "s": "русский язык", "c": ["8а"], "r": "104"}, {"t": "Кольба Владлена Вадимовна", "d": 3, "n": 3, "s": "литература", "c": ["7д"], "r": "104"}, {"t": "Кольба Владлена Вадимовна", "d": 4, "n": 3, "s": "русский язык", "c": ["7д"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 1, "n": 4, "s": "русский язык", "c": ["8а"], "r": "104"}, {"t": "Кольба Владлена Вадимовна", "d": 2, "n": 4, "s": "русский язык", "c": ["7в"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 3, "n": 4, "s": "русский язык", "c": ["5в"], "r": "302"}, {"t": "Кольба Владлена Вадимовна", "d": 4, "n": 4, "s": "русский язык", "c": ["7д"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 1, "n": 5, "s": "русский язык", "c": ["8в"], "r": "104"}, {"t": "Кольба Владлена Вадимовна", "d": 2, "n": 5, "s": "русский язык", "c": ["7в"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 4, "n": 5, "s": "русский язык", "c": ["7в"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 0, "n": 6, "s": "литература", "c": ["7в"], "r": "205"}, {"t": "Кольба Владлена Вадимовна", "d": 1, "n": 6, "s": "русский язык", "c": ["8в"], "r": "104"}, {"t": "Кольба Владлена Вадимовна", "d": 2, "n": 6, "s": "русский язык", "c": ["7д"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 3, "n": 6, "s": "литература", "c": ["7в"], "r": "305"}, {"t": "Кольба Владлена Вадимовна", "d": 4, "n": 6, "s": "русский язык", "c": ["7в"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 0, "n": 7, "s": "русский язык", "c": ["8а"], "r": "205"}, {"t": "Кольба Владлена Вадимовна", "d": 1, "n": 7, "s": "д. УЗОЯ", "c": ["8д"], "r": "104"}, {"t": "Кольба Владлена Вадимовна", "d": 2, "n": 7, "s": "русский язык", "c": ["7д"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 4, "n": 7, "s": "д. УЗОЯ", "c": ["7в"], "r": "105"}, {"t": "Кольба Владлена Вадимовна", "d": 0, "n": 8, "s": "русский язык", "c": ["8в"], "r": "205"}, {"t": "Кольба Владлена Вадимовна", "d": 3, "n": 8, "s": "д. УЗОЯ", "c": ["8в"], "r": "206"}, {"t": "Кольба Владлена Вадимовна", "d": 4, "n": 8, "s": "д. УЗОЯ", "c": ["7д"], "r": "105"}, {"t": "Новиков Денис Андреевич", "d": 0, "n": 1, "s": "вн. РОВ", "c": ["10б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 1, "n": 1, "s": "русский язык", "c": ["10в"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 2, "n": 1, "s": "русский язык", "c": ["6б"], "r": "302"}, {"t": "Новиков Денис Андреевич", "d": 3, "n": 1, "s": "вн. РМГ", "c": ["10б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 4, "n": 1, "s": "русский язык", "c": ["6д"], "r": "303"}, {"t": "Новиков Денис Андреевич", "d": 0, "n": 2, "s": "русский язык", "c": ["9а"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 1, "n": 2, "s": "русский язык", "c": ["10в"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 2, "n": 2, "s": "русский язык", "c": ["5д"], "r": "302"}, {"t": "Новиков Денис Андреевич", "d": 3, "n": 2, "s": "русский язык", "c": ["10б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 4, "n": 2, "s": "русский язык", "c": ["6б"], "r": "303"}, {"t": "Новиков Денис Андреевич", "d": 5, "n": 2, "s": "русский язык", "c": ["9г"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 0, "n": 3, "s": "русский язык", "c": ["9а"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 1, "n": 3, "s": "русский язык", "c": ["9б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 2, "n": 3, "s": "русский язык", "c": ["6д"], "r": "302"}, {"t": "Новиков Денис Андреевич", "d": 3, "n": 3, "s": "русский язык", "c": ["10б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 4, "n": 3, "s": "русский язык", "c": ["5д"], "r": "303"}, {"t": "Новиков Денис Андреевич", "d": 5, "n": 3, "s": "русский язык", "c": ["9а"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 0, "n": 4, "s": "русский язык", "c": ["6д"], "r": "302"}, {"t": "Новиков Денис Андреевич", "d": 1, "n": 4, "s": "русский язык", "c": ["6д"], "r": "304"}, {"t": "Новиков Денис Андреевич", "d": 2, "n": 4, "s": "русский язык", "c": ["6б"], "r": "302"}, {"t": "Новиков Денис Андреевич", "d": 3, "n": 4, "s": "русский язык", "c": ["6б"], "r": "303"}, {"t": "Новиков Денис Андреевич", "d": 5, "n": 4, "s": "русский язык", "c": ["9б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 0, "n": 5, "s": "русский язык", "c": ["5д"], "r": "302"}, {"t": "Новиков Денис Андреевич", "d": 1, "n": 5, "s": "русский язык", "c": ["6б"], "r": "304"}, {"t": "Новиков Денис Андреевич", "d": 3, "n": 5, "s": "русский язык", "c": ["6д"], "r": "303"}, {"t": "Новиков Денис Андреевич", "d": 4, "n": 5, "s": "русский язык", "c": ["10г"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 5, "n": 5, "s": "ЭК СРЯ", "c": ["10б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 0, "n": 6, "s": "русский язык", "c": ["6б"], "r": "302"}, {"t": "Новиков Денис Андреевич", "d": 1, "n": 6, "s": "русский язык", "c": ["5д"], "r": "304"}, {"t": "Новиков Денис Андреевич", "d": 2, "n": 6, "s": "русский язык", "c": ["9г"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 3, "n": 6, "s": "русский язык", "c": ["5д"], "r": "303"}, {"t": "Новиков Денис Андреевич", "d": 4, "n": 6, "s": "русский язык", "c": ["10г"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 0, "n": 7, "s": "русский язык", "c": ["6д"], "r": "302"}, {"t": "Новиков Денис Андреевич", "d": 2, "n": 7, "s": "русский язык", "c": ["9г"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 4, "n": 7, "s": "русский язык", "c": ["9б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 1, "n": 8, "s": "д. УЗОЯ", "c": ["10в"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 2, "n": 8, "s": "д. УЗОЯ", "c": ["9г"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 4, "n": 8, "s": "д. УЗОЯ", "c": ["9б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 0, "n": 9, "s": "д. УЗОЯ", "c": ["9а"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 1, "n": 9, "s": "д. УЗОЯ", "c": ["10б"], "r": "305"}, {"t": "Новиков Денис Андреевич", "d": 4, "n": 9, "s": "д. УЗОЯ", "c": ["10г"], "r": "305"}, {"t": "Синютина Галина Александровна", "d": 2, "n": 1, "s": "литература", "c": ["10б"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 4, "n": 1, "s": "литература", "c": ["8в"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 5, "n": 1, "s": "литература", "c": ["10в"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 0, "n": 2, "s": "литература", "c": ["10г"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 2, "n": 2, "s": "литература", "c": ["10б"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 4, "n": 2, "s": "литература", "c": ["8д"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 5, "n": 2, "s": "литература", "c": ["8б"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 0, "n": 3, "s": "литература", "c": ["10г"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 2, "n": 3, "s": "литература", "c": ["8г"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 4, "n": 3, "s": "литература", "c": ["8а"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 5, "n": 3, "s": "литература", "c": ["8в"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 0, "n": 4, "s": "литература", "c": ["10а"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 2, "n": 4, "s": "литература", "c": ["8г"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 5, "n": 4, "s": "литература", "c": ["8а"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 0, "n": 5, "s": "литература", "c": ["10а"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 4, "n": 5, "s": "литература", "c": ["10б"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 5, "n": 5, "s": "литература", "c": ["8д"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 0, "n": 6, "s": "литература", "c": ["10в"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 5, "n": 6, "s": "литература", "c": ["10а"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 0, "n": 7, "s": "литература", "c": ["10в"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 4, "n": 7, "s": "литература", "c": ["10г"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 5, "n": 7, "s": "ИП", "c": ["10б"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 0, "n": 8, "s": "литература", "c": ["8б"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 5, "n": 8, "s": "ИП", "c": ["10б"], "r": "104"}, {"t": "Синютина Галина Александровна", "d": 0, "n": 9, "s": "д. Сочинение", "c": ["11а", "11б", "11в"], "r": "104"}, {"t": "Скалаух Анна Николаевна", "d": 1, "n": 1, "s": "русский язык", "c": ["6г"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 4, "n": 1, "s": "русский язык", "c": ["6г"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 0, "n": 2, "s": "русский язык", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 1, "n": 2, "s": "литература", "c": ["6б"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 2, "n": 2, "s": "русский язык", "c": ["6г"], "r": "303"}, {"t": "Скалаух Анна Николаевна", "d": 3, "n": 2, "s": "литература", "c": ["6г"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 4, "n": 2, "s": "литература", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 0, "n": 3, "s": "русский язык", "c": ["6г"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 1, "n": 3, "s": "русский язык", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 3, "n": 3, "s": "русский язык", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 4, "n": 3, "s": "литература", "c": ["6г"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 1, "n": 4, "s": "литература", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 2, "n": 4, "s": "русский язык", "c": ["6г"], "r": "304"}, {"t": "Скалаух Анна Николаевна", "d": 4, "n": 4, "s": "литература", "c": ["6б"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 2, "n": 5, "s": "русский язык", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 3, "n": 5, "s": "русский язык", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 4, "n": 5, "s": "русский язык", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 1, "n": 6, "s": "литература", "c": ["6г"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 2, "n": 6, "s": "литература", "c": ["6в"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 3, "n": 6, "s": "литература", "c": ["6б"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 1, "n": 7, "s": "д. ОТДиКР", "c": ["6д"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 3, "n": 7, "s": "русский язык", "c": ["6г"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 4, "n": 7, "s": "д. ОТДиКР", "c": ["6б", "6г"], "r": "302"}, {"t": "Скалаух Анна Николаевна", "d": 3, "n": 8, "s": "д. ОТДиКР", "c": ["6а", "6в"], "r": "302"}, {"t": "Трифонова Наталья Викторовна", "d": 1, "n": 1, "s": "литература", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 2, "n": 1, "s": "литература", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 3, "n": 1, "s": "русский язык", "c": ["5г"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 4, "n": 1, "s": "русский язык", "c": ["9в"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 0, "n": 2, "s": "литература", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 1, "n": 2, "s": "русский язык", "c": ["5г"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 2, "n": 2, "s": "русский язык", "c": ["5г"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 3, "n": 2, "s": "русский язык", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 4, "n": 2, "s": "русский язык", "c": ["9в"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 0, "n": 3, "s": "литература", "c": ["5г"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 1, "n": 3, "s": "русский язык", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 2, "n": 3, "s": "русский язык", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 3, "n": 3, "s": "литература", "c": ["5г"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 4, "n": 3, "s": "русский язык", "c": ["7б"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 0, "n": 4, "s": "русский язык", "c": ["5г"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 1, "n": 4, "s": "литература", "c": ["5г"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 3, "n": 4, "s": "русский язык", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 4, "n": 4, "s": "русский язык", "c": ["7б"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 0, "n": 5, "s": "русский язык", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 2, "n": 5, "s": "литература", "c": ["7б"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 4, "n": 5, "s": "русский язык", "c": ["5г"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 1, "n": 6, "s": "русский язык", "c": ["7б"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 3, "n": 6, "s": "литература", "c": ["9в"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 4, "n": 6, "s": "русский язык", "c": ["6а"], "r": "301"}, {"t": "Трифонова Наталья Викторовна", "d": 0, "n": 7, "s": "русский язык", "c": ["9в"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 1, "n": 7, "s": "русский язык", "c": ["7б"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 3, "n": 7, "s": "литература", "c": ["9в"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 0, "n": 8, "s": "русский язык", "c": ["9в"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 1, "n": 8, "s": "д. УЗОЯ", "c": ["9в"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 3, "n": 8, "s": "литература", "c": ["7б"], "r": "111"}, {"t": "Трифонова Наталья Викторовна", "d": 3, "n": 9, "s": "д. УЗОЯ", "c": ["7б"], "r": "111"}, {"t": "Ханенко Ольга Сергеевна", "d": 0, "n": 1, "s": "вн. РОВ", "c": ["10д"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 2, "n": 1, "s": "литература", "c": ["11а"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 3, "n": 1, "s": "вн. РМГ", "c": ["10д"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 4, "n": 1, "s": "литература", "c": ["10д"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 5, "n": 1, "s": "литература", "c": ["10д"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 0, "n": 2, "s": "литература", "c": ["11а"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 1, "n": 2, "s": "литература", "c": ["5в"], "r": "303"}, {"t": "Ханенко Ольга Сергеевна", "d": 2, "n": 2, "s": "русский язык", "c": ["11а"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 3, "n": 2, "s": "русский язык", "c": ["11г"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 4, "n": 2, "s": "литература", "c": ["10д"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 5, "n": 2, "s": "вн. РЯ", "c": ["11г"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 0, "n": 3, "s": "литература", "c": ["11а"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 1, "n": 3, "s": "литература", "c": ["5б"], "r": "303"}, {"t": "Ханенко Ольга Сергеевна", "d": 2, "n": 3, "s": "русский язык", "c": ["11а"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 3, "n": 3, "s": "русский язык", "c": ["11г"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 5, "n": 3, "s": "ИП", "c": ["10д"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 0, "n": 4, "s": "литература", "c": ["11г"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 1, "n": 4, "s": "литература", "c": ["5д"], "r": "303"}, {"t": "Ханенко Ольга Сергеевна", "d": 2, "n": 4, "s": "литература", "c": ["5в"], "r": "301"}, {"t": "Ханенко Ольга Сергеевна", "d": 3, "n": 4, "s": "литература", "c": ["5а"], "r": "307"}, {"t": "Ханенко Ольга Сергеевна", "d": 4, "n": 4, "s": "литература", "c": ["5б"], "r": "304"}, {"t": "Ханенко Ольга Сергеевна", "d": 5, "n": 4, "s": "литература", "c": ["11г"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 0, "n": 5, "s": "литература", "c": ["11г"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 1, "n": 5, "s": "литература", "c": ["5а"], "r": "303"}, {"t": "Ханенко Ольга Сергеевна", "d": 2, "n": 5, "s": "литература", "c": ["5д"], "r": "301"}, {"t": "Ханенко Ольга Сергеевна", "d": 3, "n": 5, "s": "литература", "c": ["5в"], "r": "307"}, {"t": "Ханенко Ольга Сергеевна", "d": 4, "n": 5, "s": "литература", "c": ["5д"], "r": "304"}, {"t": "Ханенко Ольга Сергеевна", "d": 5, "n": 5, "s": "вн. РЯ", "c": ["11а"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 0, "n": 6, "s": "русский язык", "c": ["10д"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 2, "n": 6, "s": "литература", "c": ["5а"], "r": "301"}, {"t": "Ханенко Ольга Сергеевна", "d": 3, "n": 6, "s": "литература", "c": ["5б"], "r": "307"}, {"t": "Ханенко Ольга Сергеевна", "d": 0, "n": 7, "s": "русский язык", "c": ["10д"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 1, "n": 7, "s": "д. УЗОЯ", "c": ["11а"], "r": "103"}, {"t": "Ханенко Ольга Сергеевна", "d": 3, "n": 7, "s": "д. ОТДиКР", "c": ["5в"], "r": "303"}, {"t": "Ханенко Ольга Сергеевна", "d": 4, "n": 7, "s": "д. ОТДиКР", "c": ["5г"], "r": "303"}, {"t": "Ханенко Ольга Сергеевна", "d": 2, "n": 8, "s": "д. УЗОЯ", "c": ["11г"], "r": "105"}, {"t": "Ханенко Ольга Сергеевна", "d": 3, "n": 8, "s": "д. ОТДиКР", "c": ["5д"], "r": "303"}, {"t": "Ханенко Ольга Сергеевна", "d": 2, "n": 9, "s": "д. УЗОЯ", "c": ["10д"], "r": "105"}, {"t": "Шубина Ксения Сергеевна", "d": 0, "n": 1, "s": "вн. РОВ", "c": ["10а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 1, "s": "русский язык", "c": ["10а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 2, "n": 1, "s": "литература", "c": ["9б"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 3, "n": 1, "s": "вн. РМГ", "c": ["10а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 4, "n": 1, "s": "литература", "c": ["9г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 2, "s": "русский язык", "c": ["10а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 2, "n": 2, "s": "литература", "c": ["9б"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 3, "n": 2, "s": "литература", "c": ["9б"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 4, "n": 2, "s": "литература", "c": ["9г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 0, "n": 3, "s": "литература", "c": ["6д"], "r": "307"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 3, "s": "русский язык", "c": ["7а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 2, "n": 3, "s": "литература", "c": ["7г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 3, "n": 3, "s": "литература", "c": ["9а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 4, "n": 3, "s": "русский язык", "c": ["7г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 4, "s": "русский язык", "c": ["7а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 2, "n": 4, "s": "литература", "c": ["7г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 3, "n": 4, "s": "литература", "c": ["9а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 4, "n": 4, "s": "русский язык", "c": ["7г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 5, "s": "литература", "c": ["9г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 2, "n": 5, "s": "литература", "c": ["9а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 3, "n": 5, "s": "русский язык", "c": ["7а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 5, "n": 5, "s": "ИП", "c": ["10а"], "r": "204"}, {"t": "Шубина Ксения Сергеевна", "d": 0, "n": 6, "s": "русский язык", "c": ["7г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 6, "s": "литература", "c": ["7а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 2, "n": 6, "s": "литература", "c": ["6д"], "r": "304"}, {"t": "Шубина Ксения Сергеевна", "d": 3, "n": 6, "s": "русский язык", "c": ["7а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 4, "n": 6, "s": "литература", "c": ["6д"], "r": "307"}, {"t": "Шубина Ксения Сергеевна", "d": 0, "n": 7, "s": "русский язык", "c": ["7г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 7, "s": "литература", "c": ["7а"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 8, "s": "д. УЗОЯ", "c": ["7а", "7г"], "r": "206"}, {"t": "Шубина Ксения Сергеевна", "d": 1, "n": 9, "s": "д. УЗОЯ", "c": ["10а"], "r": "206"}], "timesA": {"1": "8.00-8.40", "2": "8.50-9.30", "3": "9.45-10.25", "4": "10.40-11.20", "5": "11.35-12.15", "6": "12.25-13.05", "7": "13.15-13.55", "8": "14.00-14.40", "9": "14.45-15.25"}, "timesB": {"1": "08.10-08.50", "2": "09.05-09.45", "3": "10.00-10.40", "4": "10.55-11.35", "5": "11.50-12.30", "6": "12.45-13.25", "7": "13.40-14.20", "8": "14.25-15.05", "9": "15.10-15.50"}, "teachers": ["Гневэк Ольга Владимировна", "Кольба Владлена Вадимовна", "Новиков Денис Андреевич", "Синютина Галина Александровна", "Скалаух Анна Николаевна", "Трифонова Наталья Викторовна", "Ханенко Ольга Сергеевна", "Шубина Ксения Сергеевна"], "old": {"Гневэк О.В.": "Гневэк Ольга Владимировна", "Кольба В.В.": "Кольба Владлена Вадимовна", "Новиков Д.А.": "Новиков Денис Андреевич", "Синютина Г.А.": "Синютина Галина Александровна", "Скалаух А.Н.": "Скалаух Анна Николаевна", "Трифонова Н.В.": "Трифонова Наталья Викторовна", "Ханенко О.С.": "Ханенко Ольга Сергеевна", "Шубина К.С.": "Шубина Ксения Сергеевна"}};
+const DAYS=['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+const SHORT=['Пн','Вт','Ср','Чт','Пт','Сб'];
+const T={A:DATA.timesA,B:DATA.timesB};
+const grade=c=>parseInt(c,10);
+const corp=c=>grade(c)<=6?'B':'A';
+const CORP_NAME={A:'корпус А',B:'корпус Б'};
+const byCls=(a,b)=>grade(a)-grade(b)||a.localeCompare(b,'ru');
+const CLASSES=[...new Set(DATA.lessons.flatMap(l=>l.c))].sort(byCls);
+const TEACHERS=[...DATA.teachers].sort((a,b)=>a.localeCompare(b,'ru'));
+const plural=n=>{const a=n%10,b=n%100;return a===1&&b!==11?'урок':a>=2&&a<=4&&(b<12||b>14)?'урока':'уроков'};
+const $=id=>document.getElementById(id);
+const norm=s=>s.toLowerCase().replace(/ё/g,'е').replace(/[\s.\-]/g,'');
+const hm=x=>{const[h,m]=x.trim().split(/[.:]/);return h.padStart(2,'0')+':'+m.padStart(2,'0')};
+const fmt=t=>t.split('-').map(hm).join('–');
+
+// picker
+(function(){
+  const g={};CLASSES.forEach(c=>(g[grade(c)]=g[grade(c)]||[]).push(c));
+  const nums=Object.keys(g).sort((a,b)=>a-b);
+  $('grades').innerHTML=`<div class="gnums" role="group" aria-label="Параллель">${nums.map(n=>`<button class="gnum ${corp(n+'а').toLowerCase()}" type="button" data-g="${n}" aria-expanded="false" aria-controls="gl">${n}<span class="car" aria-hidden="true"></span></button>`).join('')}</div><div class="glist" id="gl" hidden></div>`;
+  $('grades').querySelectorAll('.gnum').forEach(b=>b.onclick=()=>{
+    const open=b.getAttribute('aria-expanded')==='true';
+    $('grades').querySelectorAll('.gnum').forEach(x=>x.setAttribute('aria-expanded','false'));
+    const gl=$('gl');
+    if(open){gl.hidden=true;return}
+    b.setAttribute('aria-expanded','true');
+    const n=b.dataset.g;
+    gl.innerHTML=`<div class="gtitle">${n} классы · ${CORP_NAME[corp(n+'а')]}</div><div class="gchips">${g[n].map(c=>`<button class="chip ${corp(c).toLowerCase()}" data-k="c:${c}" type="button">${c}</button>`).join('')}</div>`;
+    gl.hidden=false;
+  });
+  $('teachers').innerHTML=TEACHERS.map(t=>`<button class="chip" data-k="t:${t}" type="button">${t}</button>`).join('');
+})();
+document.addEventListener('click',e=>{const k=e.target.closest('[data-k]');if(k){e.preventDefault();go(k.dataset.k)}});
+
+// time helpers
+const toMin=s=>{const[h,m]=s.split('.').map(Number);return h*60+m};
+function slotState(time,dayIdx){
+  const now=new Date(), wd=(now.getDay()+6)%7; if(wd!==dayIdx) return '';
+  const[a,b]=time.split('-').map(toMin), m=now.getHours()*60+now.getMinutes();
+  return m>=a&&m<b?'now':'';
+}
+const todayIdx=()=>{const d=(new Date().getDay()+6)%7;return d<6?d:0};
+
+let cur=null, onlyToday=false, selDay=todayIdx();
+try{onlyToday=localStorage.getItem('onlyToday')==='1'}catch(e){}
+
+function go(key,push=true){
+  cur=key; $('q').value=''; hideSugg();
+  if(push){ try{history.pushState(null,'','#'+encodeURIComponent(key))}catch(e){location.hash=encodeURIComponent(key)} }
+  try{localStorage.setItem('last',key)}catch(e){}
+  selDay=todayIdx(); render(); window.scrollTo(0,0);
+}
+function home(push=true){
+  cur=null; $('view').hidden=true; $('pick').hidden=false;
+  if(push){ try{history.pushState(null,'',location.pathname+location.search)}catch(e){location.hash=''} }
+  try{localStorage.removeItem('last')}catch(e){}
+}
+$('back').onclick=()=>home();
+window.addEventListener('popstate',fromHash);
+function fromHash(){const h=upg(decodeURIComponent(location.hash.slice(1)));if(valid(h))go(h,false);else home(false)}
+const upg=k=>k&&k.startsWith('t:')&&DATA.old[k.slice(2)]?'t:'+DATA.old[k.slice(2)]:k;
+const valid=k=>k&&((k.startsWith('c:')&&CLASSES.includes(k.slice(2)))||(k.startsWith('t:')&&TEACHERS.includes(k.slice(2))));
+
+function render(){
+  const [type,name]=[cur.slice(0,1),cur.slice(2)];
+  $('pick').hidden=true; $('view').hidden=false;
+  let items=[], meta='', bellCorps=[];
+  if(type==='c'){
+    const k=corp(name); bellCorps=[k];
+    items=DATA.lessons.filter(l=>l.c.includes(name)).map(l=>({...l,time:T[k][l.n]}));
+    $('vtitle').textContent=name+' класс';
+    meta=`Звонки: ${CORP_NAME[k]} · уроки кафедры филологии`;
+  } else {
+    items=DATA.lessons.filter(l=>l.t===name).map(l=>({...l,time:T[corp(l.c[0])][l.n],k:corp(l.c[0])}));
+    bellCorps=[...new Set(items.map(i=>i.k))].sort();
+    $('vtitle').textContent=name;
+    meta=`${items.length} ${plural(items.length)} в неделю · время указано по корпусу класса`;
+  }
+  $('vmeta').textContent=meta;
+  document.title=$('vtitle').textContent+' — расписание';
+  renderBells(bellCorps);
+
+  $('mode').setAttribute('aria-pressed',onlyToday);
+  $('mode').textContent=onlyToday?'Вся неделя':'Один день';
+  const tabs=$('tabs'); tabs.hidden=!onlyToday;
+  const tIdx=(new Date().getDay()+6)%7;
+  tabs.innerHTML=DAYS.map((d,i)=>`<button role="tab" type="button" data-d="${i}" aria-selected="${i===selDay}" class="${i===tIdx?'today':''}">${SHORT[i]}</button>`).join('');
+  tabs.querySelectorAll('button').forEach(b=>b.onclick=()=>{selDay=+b.dataset.d;render()});
+
+  const show=onlyToday?[selDay]:[0,1,2,3,4,5];
+  $('days').className='days'+(onlyToday?' single':'');
+  $('days').innerHTML=show.map(d=>{
+    const ls=items.filter(l=>l.d===d).sort((a,b)=>a.n-b.n);
+    const isToday=d===tIdx;
+    const body=ls.length?ls.map(l=>{
+      const st=slotState(l.time,d);
+      let x;
+      if(type==='c'){
+        const others=l.c.filter(c=>c!==name);
+        x=`<a data-k="t:${l.t}">${l.t}</a>${others.length?` · вместе с ${others.join(', ')}`:''}`;
+      } else {
+        x=l.c.map(c=>`<a data-k="c:${c}">${c}</a>`).join(', ')+` · ${CORP_NAME[l.k]}`;
+      }
+      return `<div class="les ${st}"><div><div class="n">${l.n}</div></div><div>
+        <div class="tm">${fmt(l.time)}${st?'<span class="badge">идёт сейчас</span>':''}</div>
+        <div class="s">${l.s}${l.r?`<span class="room" title="Аудитория">ауд. ${l.r}</span>`:''}</div>
+        <div class="x">${x}</div></div></div>`;
+    }).join(''):`<div class="empty">Уроков в этот день нет</div>`;
+    return `<article class="day ${isToday?'today':''}"><h3>${DAYS[d]}<small>${isToday?'сегодня':(ls.length?ls.length+' '+plural(ls.length):'')}</small></h3>${body}</article>`;
+  }).join('');
+}
+function renderBells(ks){
+  const n=Object.keys(T.A).map(Number).sort((a,b)=>a-b);
+  const tIdx=(new Date().getDay()+6)%7;
+  $('bells').innerHTML=`<table><thead><tr><th>№</th>${ks.map(k=>`<th>${k==='A'?'Корпус А':'Корпус Б'}</th>`).join('')}</tr></thead><tbody>${
+    n.map(i=>`<tr>${'<td>'+i+'</td>'}${ks.map(k=>`<td class="${tIdx<6&&slotState(T[k][i],tIdx)?'hl':''}">${fmt(T[k][i])}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+}
+$('bbtn').onclick=()=>{const b=$('bells');b.hidden=!b.hidden;$('bbtn').setAttribute('aria-pressed',!b.hidden)};
+$('mode').onclick=()=>{onlyToday=!onlyToday;try{localStorage.setItem('onlyToday',onlyToday?'1':'0')}catch(e){};render()};
+
+// search
+const INDEX=[...CLASSES.map(c=>({k:'c:'+c,label:c,sub:'класс',n:norm(c)})),...TEACHERS.map(t=>({k:'t:'+t,label:t,sub:'учитель',n:norm(t)}))];
+let hits=[],act=-1;
+function match(q){q=norm(q);if(!q)return[];return INDEX.filter(i=>i.n.startsWith(q)||(i.sub==='учитель'&&(i.n.includes(q)||i.label.toLowerCase().replace(/ё/g,'е').split(' ').some(w=>w.startsWith(q))))).slice(0,8)}
+function hideSugg(){$('sugg').hidden=true;hits=[];act=-1}
+function drawSugg(){
+  const u=$('sugg');
+  if(!hits.length){u.hidden=true;return}
+  u.innerHTML=hits.map((h,i)=>`<li role="option" data-k="${h.k}" aria-selected="${i===act}">${h.label}<small>${h.sub}</small></li>`).join('');
+  u.hidden=false;
+}
+$('q').addEventListener('input',e=>{hits=match(e.target.value);act=hits.length?0:-1;drawSugg()});
+$('q').addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'&&hits.length){e.preventDefault();act=(act+1)%hits.length;drawSugg()}
+  else if(e.key==='ArrowUp'&&hits.length){e.preventDefault();act=(act-1+hits.length)%hits.length;drawSugg()}
+  else if(e.key==='Escape')hideSugg();
+});
+$('q').addEventListener('blur',()=>setTimeout(hideSugg,150));
+$('sform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const h=hits[act]||match($('q').value)[0];
+  if(h)go(h.k); else {$('q').value='';$('q').placeholder='Не найдено — попробуйте «7б» или фамилию';}
+});
+
+// init
+(function(){
+  const h=upg(decodeURIComponent(location.hash.slice(1)));
+  let last=null;try{last=upg(localStorage.getItem('last'))}catch(e){}
+  if(valid(h))go(h,false); else if(valid(last))go(last,false);
+  setInterval(()=>{if(cur)render()},60000);
+})();
+</script>
+</body>
+</html>
