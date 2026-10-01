@@ -4,7 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#323c8d">
-<title>Расписание уроков — Филология</title>
+<title>Расписание</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Расписание">
+<meta name="application-name" content="Расписание">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -236,7 +246,7 @@ function go(key,push=true){
   selDay=todayIdx(); render(); window.scrollTo(0,0);
 }
 function home(push=true){
-  cur=null; $('view').hidden=true; $('pick').hidden=false;
+  cur=null; document.title='Расписание'; $('view').hidden=true; $('pick').hidden=false;
   if(push){ try{history.pushState(null,'',location.pathname+location.search)}catch(e){location.hash=''} }
   try{localStorage.removeItem('last')}catch(e){}
 }
